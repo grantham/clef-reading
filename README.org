@@ -1,0 +1,58 @@
+#+TITLE: C Clef Reading Exercise Generation
+#+AUTHOR: Roger Grantham
+#+EMAIL: grantham@member.fsf.org
+
+* What is this?
+This is a modest tool to generate C clef reading exercises and uses [[https://ccrma.stanford.edu/software/cmn/cmn/cmn.html][Common Music Notation]]. 
+
+If you are someone who is good at transposition (like most horn players) and has gotten by on reading the C clefs mainly by transposition (or are simply new to them), you will find that you are slowed down when trying to sight-read scores.
+
+The exercises this program generates are aimed at promoting the immediate recall of a given note.
+
+When you generate a clef reading exercise, you will find the following format:
+
+1. A single line on which a note on each line and then on each space is presented
+2. A number of random notes appearing on any line of the clef
+3. A number of random notes appearing on any space of the clef
+4. A number of random notes appearing on any line or space of the clef
+5. A number of chromatic notes appearing on any line or space of the clef
+
+The randomization should prove to be especially effective, since when reading real music, one easily begins to play by finding the next note by _interval_, rather than _immediate recall_ of the indicated pitch.
+
+* Dependencies
+- Common Lisp (tested only on SBCL, but should work on any Lisp on which CMN works)
+- ASDF
+- [[https://ccrma.stanford.edu/software/cmn/cmn/cmn.html][Common Music Notation]]
+
+* Setup
+** Install [[https://ccrma.stanford.edu/software/cmn/cmn/cmn.html][Common Music Notation]].
+#+BEGIN_SRC sh
+$ cd where/you/place/your/lisp/systems
+$ wget ftp://ccrma-ftp.stanford.edu/pub/Lisp/cmn.tar.gz
+$ tar -xvf cmn.tar.gz
+$ ln -s cmn/cmn.asd
+#+END_SRC
+
+** Install [[https://github.com/grantham/clef-reading][clef-reading]]
+#+BEGIN_SRC sh
+$ cd where/you/want/to/clone/clef-reading/repo
+$ git clone git://github.com/grantham/clef-reading.git
+$ cd clef-reading
+$ ln -s ./clef-reading.asd where/you/place/your/lisp/systems/clef-reading.asd
+#+END_SRC
+
+* Running
+At your LISP REPL:
+
+#+BEGIN_SRC common-lisp
+CL-USER> (asdf:operate 'asdf:load-op :clef-reading)
+CL-USER> (in-package :cmn)
+CL-USER> (make-reading 480 :clef soprano :file-name "soprano-reading.ps")
+#+END_SRC
+
+- The first argument to =make-reading= is the number of notes to generate for stages 2 - 5 listed above. 
+- The second argument, =:clef= is the clef for which the exercise is to be generate. May be one of =soprano=, =alto=, or =tenor=
+- The last (optional) argument the output file name to which to write the exercise. Not providing this argument defaults to an output file called =clef-reading.ps=.
+
+* License
+GPL version 3 or later
